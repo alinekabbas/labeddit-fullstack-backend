@@ -9,18 +9,25 @@ CREATE TABLE users(
     created_at TEXT DEFAULT (DATETIME()) NOT NULL
 );
 
+-- Senha Lili: lili&2023A
+
 CREATE TABLE posts(
     id TEXT PRIMARY KEY UNIQUE NOT NULL,
     creator_id TEXT NOT NULL,
     content TEXT NOT NULL,
     likes INTEGER DEFAULT (0) NOT NULL,
     dislikes INTEGER DEFAULT (0) NOT NULL,
+    comments_post INTEGER NOT NULL,
     created_at TEXT DEFAULT (DATETIME()) NOT NULL,
     updated_at TEXT DEFAULT (DATETIME()) NOT NULL,
     FOREIGN KEY (creator_id) REFERENCES users(id)
         ON DELETE CASCADE 
         ON UPDATE CASCADE
 );
+
+SELECT * FROM posts;
+
+DROP TABLE posts;
 
 CREATE TABLE likes_dislikes_posts(
     user_id TEXT NOT NULL,
@@ -41,7 +48,6 @@ CREATE TABLE comments(
     content TEXT NOT NULL,
     likes INTEGER DEFAULT (0) NOT NULL,
     dislikes INTEGER DEFAULT (0) NOT NULL,
-    comment_post INTEGER NOT NULL,
     created_at TEXT DEFAULT (DATETIME()) NOT NULL,
     updated_at TEXT DEFAULT (DATETIME()) NOT NULL,
     FOREIGN KEY (creator_id) REFERENCES users(id)
@@ -51,6 +57,8 @@ CREATE TABLE comments(
         ON DELETE CASCADE 
         ON UPDATE CASCADE
 );
+
+DROP TABLE comments;
 
 CREATE TABLE likes_dislikes_comments(
     user_id TEXT NOT NULL,
