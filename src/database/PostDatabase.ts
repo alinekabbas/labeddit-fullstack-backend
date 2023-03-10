@@ -29,6 +29,8 @@ export class PostDatabase extends BaseDatabase{
             .insert(newPostDB)
     }
 
+    
+
     public async findPost(id: string) {
         const [postDB]: PostDB[] | undefined = await BaseDatabase
             .connection(PostDatabase.TABLE_POSTS)
@@ -113,4 +115,6 @@ export class PostDatabase extends BaseDatabase{
                 post_id: likeDislike.post_id
             })
     }
+
+    
 }
