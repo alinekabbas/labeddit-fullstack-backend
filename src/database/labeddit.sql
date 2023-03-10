@@ -10,6 +10,7 @@ CREATE TABLE users(
 );
 
 -- Senha Lili: lili&2023A
+-- Senha Nanda: nana@963P
 
 CREATE TABLE posts(
     id TEXT PRIMARY KEY UNIQUE NOT NULL,
@@ -17,7 +18,7 @@ CREATE TABLE posts(
     content TEXT NOT NULL,
     likes INTEGER DEFAULT (0) NOT NULL,
     dislikes INTEGER DEFAULT (0) NOT NULL,
-    comments_post INTEGER NOT NULL,
+    comments_post INTEGER DEFAULT (0) NOT NULL,
     created_at TEXT DEFAULT (DATETIME()) NOT NULL,
     updated_at TEXT DEFAULT (DATETIME()) NOT NULL,
     FOREIGN KEY (creator_id) REFERENCES users(id)
@@ -53,10 +54,14 @@ CREATE TABLE comments(
     FOREIGN KEY (creator_id) REFERENCES users(id)
         ON DELETE CASCADE 
         ON UPDATE CASCADE,
-    FOREIGN KEY (post_id) REFERENCES post(id)
+    FOREIGN KEY (post_id) REFERENCES posts(id)
         ON DELETE CASCADE 
         ON UPDATE CASCADE
 );
+
+
+
+SELECT * FROM comments;
 
 DROP TABLE comments;
 

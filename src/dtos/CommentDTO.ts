@@ -1,8 +1,8 @@
 import { BadRequestError } from "../errors/BadRequestError"
-import { Post } from "../models/Post"
-import { PostModel } from "../types"
+import { Comment } from "../models/Comment"
 
 export interface CreateCommentInputDTO {
+    id: string
     token: string | undefined,
     content: string
 }
@@ -44,13 +44,18 @@ export interface LikeDislikeCommentOutputDTO {
     dislike: number
 }
 
-export class PostDTO {
+export class CommentDTO {
     
-    public createPostInput(
+    public createCommentInput(
+        id: unknown,
         token: unknown,
         content: unknown
-    ): CreateCommentInputDTO {
         
+    ): CreateCommentInputDTO {
+
+        if (typeof id !== "string") {
+            throw new BadRequestError("'id' deve ser string")
+        }
         if (typeof token !== "string") {
             throw new BadRequestError("'token' deve ser string")
         }
@@ -59,21 +64,22 @@ export class PostDTO {
         }
 
         const dto: CreateCommentInputDTO = {
+            id,
             token,
             content
         }
         return dto
     }
 
-    public createPostOutput(post: Post): CreateCommentOutputDTO {
+    public createCommentOutput(comment: Comment): CreateCommentOutputDTO {
         const dto: CreateCommentOutputDTO = {
-            message: "Post criado com sucesso",
-            content: post.getContent()
+            message: "Comentário criado com sucesso",
+            content: comment.getContent()
         }
         return dto 
     }
     
-    public editPostInput(
+    public editCommentInput(
         id: unknown,
         token: unknown,
         content: unknown
@@ -97,15 +103,15 @@ export class PostDTO {
         return dto
     }
 
-    public editPostOutput(post: Post): EditCommentOutputDTO {
+    public editCommentOutput(comment: Comment): EditCommentOutputDTO {
         const dto: EditCommentOutputDTO = {
-            message: "Post editado com sucesso",
-            content: post.getContent()
+            message: "Comentário editado com sucesso",
+            content: comment.getContent()
         }
         return dto 
     }
 
-    public deletePostInput(
+    public deleteCommentInput(
         id: unknown,
         token: unknown
     ): DeleteCommentInputDTO {
@@ -124,14 +130,14 @@ export class PostDTO {
         return dto
     }
 
-    public deletePostOutput(): DeleteCommentOutputDTO {
+    public deleteCommentOutput(): DeleteCommentOutputDTO {
         const dto: DeleteCommentOutputDTO = {
-            message: "Post excluído com sucesso",
+            message: "Comentário excluído com sucesso",
         }
         return dto 
     }
 
-    public likeDislikePostInput(
+    public likeDislikeCommentInput(
         id: unknown,
         token: unknown,
         like: unknown
@@ -156,11 +162,11 @@ export class PostDTO {
         return dto
     }
 
-    public likeDislikePostOutput(post: Post): LikeDislikeCommentOutputDTO {
+    public likeDislikeCommentOutput(comment: Comment): LikeDislikeCommentOutputDTO {
         const dto: LikeDislikeCommentOutputDTO = {
-            content: post.getContent(),
-            like: post.getLikes(),
-            dislike: post.getDislikes()
+            content: comment.getContent(),
+            like: comment.getLikes(),
+            dislike: comment.getDislikes()
         }
         return dto 
     }

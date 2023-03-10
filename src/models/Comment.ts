@@ -37,6 +37,10 @@ export class Comment {
         this.content = value
     }
 
+    public addContent() {
+        this.content +=1
+    }
+
     public getLikes() : number {
         return this.likes
     }
