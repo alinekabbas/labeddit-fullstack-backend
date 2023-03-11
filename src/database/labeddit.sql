@@ -9,8 +9,11 @@ CREATE TABLE users(
     created_at TEXT DEFAULT (DATETIME()) NOT NULL
 );
 
+SELECT * from users;
 -- Senha Lili: lili&2023A
 -- Senha Nanda: nana@963P
+-- Senha Dudu: Dudu&7539
+-- Senha Malu: mAlu@95136
 
 CREATE TABLE posts(
     id TEXT PRIMARY KEY UNIQUE NOT NULL,
@@ -59,6 +62,8 @@ CREATE TABLE comments(
         ON UPDATE CASCADE
 );
 
+SELECT * FROM comments
+WHERE post_id = "1287b27e-22b3-4f48-b94e-0281ef096698";
 
 
 SELECT * FROM comments;

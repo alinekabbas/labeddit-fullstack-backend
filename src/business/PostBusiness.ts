@@ -1,7 +1,18 @@
 import { PostDatabase } from "../database/PostDatabase";
-import { CreatePostInputDTO, DeletePostInputDTO, EditPostInputDTO, GetPostInputDTO, GetPostOuputDTO, LikeDislikePostInputDTO, PostDTO } from "../dtos/PostDTO";
+import {
+CreatePostInputDTO,
+DeletePostInputDTO,
+EditPostInputDTO,
+GetPostInputDTO,
+GetPostOuputDTO,
+GetPostWithCommentsInputDTO,
+LikeDislikePostInputDTO,
+PostDTO
+}
+from "../dtos/PostDTO";
 import { BadRequestError } from "../errors/BadRequestError";
 import { NotFoundError } from "../errors/NotFoundError";
+import { Comment } from "../models/Comment";
 import { Post } from "../models/Post";
 import { IdGenerator } from "../services/IdGenerator";
 import { TokenManager } from "../services/TokenManager";
@@ -13,7 +24,7 @@ export class PostBusiness {
         private postDatabase: PostDatabase,
         private idGenerator: IdGenerator,
         private tokenManager: TokenManager
-    ) {}
+    ) { }
 
     public getPosts = async (input: GetPostInputDTO) => {
         const { token } = input
@@ -50,6 +61,60 @@ export class PostBusiness {
 
         return output
 
+    }
+
+    public getPostWithComments = async (input: GetPostWithCommentsInputDTO) => {
+        const { id, token } = input
+
+        if (token === undefined) {
+            throw new BadRequestError("'token' ausente")
+        }
+
+        const tokenPayload = this.tokenManager.getPayload(token)
+
+        if (tokenPayload === null) {
+            throw new BadRequestError("'token' inválido")
+        }
+
+        const postDB = await this.postDatabase.getPostsWithComments(id)
+
+        if (!postDB) {
+            throw new NotFoundError("'id' não encontrado")
+        }
+
+        const post = new Post(
+            postDB.id,
+            postDB.content,
+            postDB.likes,
+            postDB.dislikes,
+            postDB.comments_post,
+            postDB.created_at,
+            postDB.updated_at,
+            postDB.creator_id,
+            postDB.creator_nickname
+        )
+
+        const commentsPost = await this.postDatabase.findComments(id)
+
+        if (!commentsPost) {
+            throw new NotFoundError("'id' não encontrado")
+        }
+
+        const comments = new Comment(
+            commentsPost.id,
+            commentsPost.post_id,
+            commentsPost.content,
+            commentsPost.likes,
+            commentsPost.dislikes,
+            commentsPost.created_at,
+            commentsPost.updated_at,
+            commentsPost.creator_id,
+            commentsPost.creator_nickname
+        )
+
+        const output = this.postDTO.getPostWithCommentsOutput(post, comments)
+
+        return output
     }
 
     public createPost = async (input: CreatePostInputDTO) => {
