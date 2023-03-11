@@ -1,4 +1,5 @@
 import { BadRequestError } from "../errors/BadRequestError"
+import { Comment } from "../models/Comment"
 import { Post } from "../models/Post"
 import { PostModel } from "../types"
 
@@ -8,6 +9,39 @@ export interface GetPostInputDTO {
 
 export type GetPostOuputDTO = PostModel[]
 
+export interface GetPostWithCommentsInputDTO {
+    id: string,
+    token: string | undefined
+}
+
+export type GetPostWithCommentsOuputDTO = {
+    id: string,
+    content: string,
+    likes: number,
+    dislikes: number,
+    commentsPost: number,
+    createdAt: string,
+    updatedAt: string,
+    creator: {
+        id: string,
+        nickname: string
+    },
+    comments: [{
+        id: string,
+        postId: string,
+        content: string,
+        likes: number,
+        dislikes: number,
+        createdAt: string,
+        updatedAt: string,
+        creator: {
+            id: string,
+            nickname: string
+        }
+    }]
+
+}
+
 export interface CreatePostInputDTO {
     token: string | undefined,
     content: string
@@ -15,7 +49,7 @@ export interface CreatePostInputDTO {
 
 export interface CreatePostOutputDTO {
     message: string,
-    content: string
+    post: Post
 }
 
 export interface EditPostInputDTO {
@@ -54,7 +88,7 @@ export class PostDTO {
     public getPostInput(
         token: unknown
     ): GetPostInputDTO {
-        
+
         if (typeof token !== "string") {
             throw new BadRequestError("'token' deve ser string")
         }
@@ -66,11 +100,61 @@ export class PostDTO {
         return dto
     }
 
+    public getPostWithCommentsInput(
+        id: unknown,
+        token: undefined
+    ): GetPostWithCommentsInputDTO {
+        if (typeof id !== "string") {
+            throw new BadRequestError("'id' deve ser string")
+        }
+
+        if (typeof token !== "string") {
+            throw new BadRequestError("'token' deve ser string")
+        }
+
+        const dto: GetPostWithCommentsInputDTO = {
+            id,
+            token
+        }
+
+        return dto
+    }
+
+    public getPostWithCommentsOutput(post: Post, comment: Comment): GetPostWithCommentsOuputDTO {
+        const dto: GetPostWithCommentsOuputDTO = {
+            id: post.getId(),
+            content: post.getContent(),
+            likes: post.getLikes(),
+            dislikes: post.getDislikes(),
+            commentsPost: post.getCommentsPost(),
+            createdAt: post.getCreatedAt(),
+            updatedAt: post.getUpdatedAt(),
+            creator: {
+                id: post.getCreatorId(),
+                nickname: post.getCreatorNickname()
+            },
+            comments: [{
+                id: comment.getId(),
+                postId: comment.getPostId(),
+                content: comment.getContent(),
+                likes: comment.getLikes(),
+                dislikes: comment.getDislikes(),
+                createdAt: comment.getCreatedAt(),
+                updatedAt: comment.getUpdatedAt(),
+                creator: {
+                    id: comment.getCreatorId(),
+                    nickname: comment.getCreatorNickname()
+                }
+            }]
+        }
+        return dto
+    }
+
     public createPostInput(
         token: unknown,
         content: unknown
     ): CreatePostInputDTO {
-        
+
         if (typeof token !== "string") {
             throw new BadRequestError("'token' deve ser string")
         }
@@ -88,11 +172,11 @@ export class PostDTO {
     public createPostOutput(post: Post): CreatePostOutputDTO {
         const dto: CreatePostOutputDTO = {
             message: "Post criado com sucesso",
-            content: post.getContent()
+            post: post
         }
-        return dto 
+        return dto
     }
-    
+
     public editPostInput(
         id: unknown,
         token: unknown,
@@ -101,7 +185,7 @@ export class PostDTO {
         if (typeof id !== "string") {
             throw new BadRequestError("'id' deve ser string")
         }
-        
+
         if (typeof token !== "string") {
             throw new BadRequestError("'token' deve ser string")
         }
@@ -122,7 +206,7 @@ export class PostDTO {
             message: "Post editado com sucesso",
             content: post.getContent()
         }
-        return dto 
+        return dto
     }
 
     public deletePostInput(
@@ -132,7 +216,7 @@ export class PostDTO {
         if (typeof id !== "string") {
             throw new BadRequestError("'id' deve ser string")
         }
-        
+
         if (typeof token !== "string") {
             throw new BadRequestError("'token' deve ser string")
         }
@@ -148,7 +232,7 @@ export class PostDTO {
         const dto: DeletePostOutputDTO = {
             message: "Post excluído com sucesso",
         }
-        return dto 
+        return dto
     }
 
     public likeDislikePostInput(
@@ -159,7 +243,7 @@ export class PostDTO {
         if (typeof id !== "string") {
             throw new BadRequestError("'id' deve ser string")
         }
-        
+
         if (typeof token !== "string") {
             throw new BadRequestError("'token' deve ser string")
         }
@@ -182,8 +266,8 @@ export class PostDTO {
             like: post.getLikes(),
             dislike: post.getDislikes()
         }
-        return dto 
+        return dto
     }
 
-    
+
 }

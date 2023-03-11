@@ -10,7 +10,8 @@ export class Post {
         private createdAt: string,
         private updatedAt: string,
         private creatorId: string,
-        private creatorNickname: string
+        private creatorNickname: string,
+        
     ) {}
 
     public getId() : string {
@@ -59,6 +60,18 @@ export class Post {
 
     public removeDislike() {
         this.dislikes -= 1
+    }
+
+    public getCommentsPost() : number {
+        return this.commentsPost
+    }
+ 
+    public setCommentsPost (value : number): void {
+        this.commentsPost = value
+    }
+
+    public addCommentsPosts() {
+        this.commentsPost +=1
     }
 
     public getCreatedAt(): string {

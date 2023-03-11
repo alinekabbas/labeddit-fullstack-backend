@@ -3,6 +3,7 @@ import { CommentDTO, CreateCommentInputDTO, DeleteCommentInputDTO, EditCommentIn
 import { BadRequestError } from "../errors/BadRequestError"
 import { NotFoundError } from "../errors/NotFoundError"
 import { Comment } from "../models/Comment"
+import { Post } from "../models/Post"
 import { IdGenerator } from "../services/IdGenerator"
 import { TokenManager } from "../services/TokenManager"
 import { LikesDislikesCommentsDB, USER_ROLE } from "../types"
@@ -32,10 +33,10 @@ export class CommentBusiness {
             throw new BadRequestError("'token' inválido")
         }
 
-        const postToEditDB = await this.commentDatabase.findPost(id)
+        const post = await this.commentDatabase.findPost(id)
 
-        if (!postToEditDB) {
-            throw new NotFoundError("'id' não encontrado")
+        if (!post) {
+            throw new NotFoundError("'post' não encontrado")
         }
 
         const commentId = this.idGenerator.generate()
@@ -57,16 +58,28 @@ export class CommentBusiness {
         const newCommentDB = newComment.toCommentDBModel()
 
         await this.commentDatabase.insertComment(newCommentDB)
+        
+        const updateCommentCount = new Post(
+            post.id,
+            post.content,
+            post.likes,
+            post.dislikes,
+            post.comments_post,
+            post.created_at,
+            post.updated_at,
+            post.creator_id,
+            post.creator_nickname
+        )
+        
+        updateCommentCount.addCommentsPosts()
 
-        //a cada comentário novo acrescenta 1 no comments_post
+        await this.commentDatabase.updateCommentsInPosts(id)
+
+        updateCommentCount.toBusinessModel()
         
         const output = this.commentDTO.createCommentOutput(newComment)
 
         return output
-    }
-
-    public getCommentsByPostId = async () => {
-        
     }
 
     public editComment = async (input: EditCommentInputDTO) => {
@@ -86,7 +99,7 @@ export class CommentBusiness {
             throw new BadRequestError("'token' inválido")
         }
 
-        const commentToEditDB = await this.commentDatabase.findPost(id)
+        const commentToEditDB = await this.commentDatabase.findComment(id)
 
         if (!commentToEditDB) {
             throw new NotFoundError("'id' não encontrado")
@@ -138,7 +151,7 @@ export class CommentBusiness {
             throw new BadRequestError("'token' inválido")
         }
 
-        const commentToDeleteDB = await this.commentDatabase.findPost(id)
+        const commentToDeleteDB = await this.commentDatabase.findComment(id)
 
         if (!commentToDeleteDB) {
             throw new NotFoundError("'id' não encontrada")
@@ -194,8 +207,8 @@ export class CommentBusiness {
 
         const comment = new Comment(
             likeDislikeCommentDB.id,
-            likeDislikeCommentDB.content,
             likeDislikeCommentDB.post_id,
+            likeDislikeCommentDB.content,
             likeDislikeCommentDB.likes,
             likeDislikeCommentDB.dislikes,
             likeDislikeCommentDB.created_at,

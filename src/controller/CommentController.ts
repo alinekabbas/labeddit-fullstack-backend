@@ -32,10 +32,6 @@ export class CommentController {
         }
     }
 
-    public getCommentsByPostId = async () => {
-
-    }
-
     public editComment = async (req: Request, res: Response) => {
         try {
             const input = this.commentDTO.editCommentInput(

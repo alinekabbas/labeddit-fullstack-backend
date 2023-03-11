@@ -1,6 +1,7 @@
 import { BadRequestError } from "../errors/BadRequestError"
 import { Comment } from "../models/Comment"
 
+
 export interface CreateCommentInputDTO {
     id: string
     token: string | undefined,
@@ -9,7 +10,7 @@ export interface CreateCommentInputDTO {
 
 export interface CreateCommentOutputDTO {
     message: string,
-    content: string
+    comment: Comment
 }
 
 export interface EditCommentInputDTO {
@@ -74,7 +75,7 @@ export class CommentDTO {
     public createCommentOutput(comment: Comment): CreateCommentOutputDTO {
         const dto: CreateCommentOutputDTO = {
             message: "Comentário criado com sucesso",
-            content: comment.getContent()
+            comment: comment
         }
         return dto 
     }
