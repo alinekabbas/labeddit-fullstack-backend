@@ -6,6 +6,9 @@ A API desenvolvida permite a interação de usuários na rede social.
 
 🔴 Acesse [aqui](https://documenter.getpostman.com/view/24460902/2s93JwMgYK) a documentação da API.
 
+Para o deploy foi utilizado o serviço de nuvem Render.
+[Link](https://labeddit-fullstack-backend.onrender.com) do deploy.
+
 ## Funcionalidades
 
 - Para usuários:
