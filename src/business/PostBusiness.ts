@@ -154,8 +154,6 @@ export class PostBusiness {
 
         await this.postDatabase.insertPost(newPostDB)
 
-
-
         const output = this.postDTO.createPostOutput(newPost)
 
         return output
@@ -233,7 +231,7 @@ export class PostBusiness {
         const postToDeleteDB = await this.postDatabase.findPost(id)
 
         if (!postToDeleteDB) {
-            throw new NotFoundError("'id' não encontrada")
+            throw new NotFoundError("'id' não encontrado")
         }
 
         const creatorId = tokenPayload.id
@@ -269,7 +267,7 @@ export class PostBusiness {
         const likeDislikePostDB = await this.postDatabase.findPostWithCreatorId(id)
 
         if (!likeDislikePostDB) {
-            throw new NotFoundError("'id' não encontrada")
+            throw new NotFoundError("'id' não encontrado")
         }
 
         const userId = tokenPayload.id
@@ -305,7 +303,7 @@ export class PostBusiness {
                 post.removeLike()
             } else {
                 await this.postDatabase.updateLikeDislike(likeDislikeDB)
-                post.removeLike()
+                post.removeLike() 
                 post.addDislike()
             }
         } else if (likeDislikeExists === "already disliked") {
@@ -327,7 +325,7 @@ export class PostBusiness {
         const updatedPostDB = post.toDBModel()
         await this.postDatabase.updatePost(updatedPostDB)
 
-        const output = this.postDTO.likeDislikePostOutput(post)
+        const output = this.postDTO.likeDislikePostOutput()
 
         return output
 
