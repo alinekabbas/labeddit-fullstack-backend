@@ -56,19 +56,6 @@ export interface PostWithCreatorDB extends PostDB {
     creator_nickname: string
 }
 
-export interface PostWithCommentsDB extends PostDB {
-    creator_nickname: string
-    comments_id: string,
-    comments_post_id: string,
-    comments_content: string,
-    comments_likes: number,
-    comments_dislikes: number,
-    comments_created_at: string,
-    comments_updated_at: string,
-    comments_creator_id: string,
-    comments_creator_nickname: string
-}
-
 export interface LikesDislikesPostsDB {
     user_id: string,
     post_id: string,

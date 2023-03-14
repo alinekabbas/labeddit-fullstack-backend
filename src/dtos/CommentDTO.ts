@@ -10,7 +10,17 @@ export interface CreateCommentInputDTO {
 
 export interface CreateCommentOutputDTO {
     message: string,
-    comment: Comment
+    comment: {
+        id: string,
+        postId: string,
+        content: string,
+        likes: number,
+        dislikes: number,
+        createdAt: string,
+        updatedAt: string,
+        creatorId: string,
+        creatorNickname: string
+    }
 }
 
 export interface EditCommentInputDTO {
@@ -40,9 +50,7 @@ export interface LikeDislikeCommentInputDTO {
 }
 
 export interface LikeDislikeCommentOutputDTO {
-    content: string,
-    like: number,
-    dislike: number
+    message: string
 }
 
 export class CommentDTO {
@@ -75,7 +83,17 @@ export class CommentDTO {
     public createCommentOutput(comment: Comment): CreateCommentOutputDTO {
         const dto: CreateCommentOutputDTO = {
             message: "Comentário criado com sucesso",
-            comment: comment
+            comment: {
+                id: comment.getId(),
+                postId: comment.getPostId(),
+                content: comment.getContent(),
+                likes: comment.getLikes(),
+                dislikes: comment.getDislikes(),
+                createdAt: comment.getCreatedAt(),
+                updatedAt: comment.getUpdatedAt(),
+                creatorId: comment.getCreatorId(),
+                creatorNickname: comment.getCreatorNickname()
+            }
         }
         return dto 
     }
@@ -165,9 +183,7 @@ export class CommentDTO {
 
     public likeDislikeCommentOutput(comment: Comment): LikeDislikeCommentOutputDTO {
         const dto: LikeDislikeCommentOutputDTO = {
-            content: comment.getContent(),
-            like: comment.getLikes(),
-            dislike: comment.getDislikes()
+            message: "Você interagiu no post"
         }
         return dto 
     }

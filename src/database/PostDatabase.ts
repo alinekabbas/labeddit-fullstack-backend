@@ -6,7 +6,7 @@ export class PostDatabase extends BaseDatabase {
     public static TABLE_LIKES_DISLIKES = "likes_dislikes_posts"
     public static TABLE_COMMENTS = "comments"
 
-    public async getPosts() {
+    public async getPosts(): Promise<PostWithCreatorDB[]> {
         const result: PostWithCreatorDB[] = await BaseDatabase
             .connection(PostDatabase.TABLE_POSTS)
             .select(
@@ -21,16 +21,16 @@ export class PostDatabase extends BaseDatabase {
                 "users.nickname AS creator_nickname"
             )
             .join("users", "posts.creator_id", "=", "users.id")
-        return result
+            return result
     }
 
-    public async insertPost(newPostDB: PostDB) {
+    public async insertPost(newPostDB: PostDB):Promise<void> {
         await BaseDatabase
             .connection(PostDatabase.TABLE_POSTS)
             .insert(newPostDB)
     }
 
-    public async getPostsWithComments(id: string) {
+    public async getPostsWithComments(id: string): Promise<PostWithCreatorDB | undefined> {
         const [posts]: PostWithCreatorDB[] = await BaseDatabase
             .connection(PostDatabase.TABLE_POSTS)
             .select(
@@ -49,7 +49,7 @@ export class PostDatabase extends BaseDatabase {
         return posts
     }
 
-    public async findComments(id: string) {
+    public async findComments(id: string):Promise<CommentWithCreatorDB | undefined> {
         const [comments]: CommentWithCreatorDB[] = await BaseDatabase
             .connection(PostDatabase.TABLE_COMMENTS)
             .select(
@@ -70,7 +70,7 @@ export class PostDatabase extends BaseDatabase {
 
     }
 
-    public async findPost(id: string) {
+    public async findPost(id: string): Promise<PostDB | undefined> {
         const [postDB]: PostDB[] | undefined = await BaseDatabase
             .connection(PostDatabase.TABLE_POSTS)
             .where({ id })
@@ -78,14 +78,14 @@ export class PostDatabase extends BaseDatabase {
         return postDB
     }
 
-    public async updatePost(postDB: PostDB) {
+    public async updatePost(postDB: PostDB):Promise<void> {
         await BaseDatabase
             .connection(PostDatabase.TABLE_POSTS)
             .update(postDB)
             .where({ id: postDB.id })
     }
 
-    public async deletePost(id: string) {
+    public async deletePost(id: string):Promise<void> {
         await BaseDatabase
             .connection(PostDatabase.TABLE_LIKES_DISLIKES)
             .delete()
@@ -102,7 +102,7 @@ export class PostDatabase extends BaseDatabase {
             .where({ id: id })
     }
 
-    public async findPostWithCreatorId(id: string) {
+    public async findPostWithCreatorId(id: string): Promise<PostWithCreatorDB | undefined> {
         const result: PostWithCreatorDB[] | undefined = await BaseDatabase
             .connection(PostDatabase.TABLE_POSTS)
             .select(
@@ -122,7 +122,7 @@ export class PostDatabase extends BaseDatabase {
         return result[0]
     }
 
-    public async likeOrDislikePost(likeDislike: LikesDislikesPostsDB) {
+    public async likeOrDislikePost(likeDislike: LikesDislikesPostsDB):Promise<void> {
         await BaseDatabase.connection(PostDatabase.TABLE_LIKES_DISLIKES)
             .insert(likeDislike)
     }
@@ -142,7 +142,7 @@ export class PostDatabase extends BaseDatabase {
         }
     }
 
-    public async removeLikeDislike(likeDislike: LikesDislikesPostsDB) {
+    public async removeLikeDislike(likeDislike: LikesDislikesPostsDB):Promise<void> {
         await BaseDatabase.connection(PostDatabase.TABLE_LIKES_DISLIKES)
             .delete()
             .where({
@@ -151,7 +151,7 @@ export class PostDatabase extends BaseDatabase {
             })
     }
 
-    public async updateLikeDislike(likeDislike: LikesDislikesPostsDB) {
+    public async updateLikeDislike(likeDislike: LikesDislikesPostsDB):Promise<void> {
         await BaseDatabase.connection(PostDatabase.TABLE_LIKES_DISLIKES)
             .update(likeDislike)
             .where({

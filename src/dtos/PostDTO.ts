@@ -49,7 +49,17 @@ export interface CreatePostInputDTO {
 
 export interface CreatePostOutputDTO {
     message: string,
-    post: Post
+    post: {
+        id: string,
+        content: string,
+        likes: number,
+        dislikes: number,
+        commentsPost: number,
+        createdAt: string,
+        updatedAt: string,
+        creatorId: string,
+        creatorNickname: string
+    }
 }
 
 export interface EditPostInputDTO {
@@ -79,9 +89,7 @@ export interface LikeDislikePostInputDTO {
 }
 
 export interface LikeDislikePostOutputDTO {
-    content: string,
-    like: number,
-    dislike: number
+    message: string
 }
 
 export class PostDTO {
@@ -172,7 +180,17 @@ export class PostDTO {
     public createPostOutput(post: Post): CreatePostOutputDTO {
         const dto: CreatePostOutputDTO = {
             message: "Post criado com sucesso",
-            post: post
+            post: {
+                id: post.getId(),
+                content: post.getContent(),
+                likes: post.getLikes(),
+                dislikes: post.getDislikes(),
+                commentsPost: post.getCommentsPost(),
+                createdAt: post.getCreatedAt(),
+                updatedAt: post.getUpdatedAt(),
+                creatorId: post.getCreatorId(),
+                creatorNickname: post.getCreatorNickname()
+            }
         }
         return dto
     }
@@ -260,11 +278,9 @@ export class PostDTO {
         return dto
     }
 
-    public likeDislikePostOutput(post: Post): LikeDislikePostOutputDTO {
+    public likeDislikePostOutput(): LikeDislikePostOutputDTO {
         const dto: LikeDislikePostOutputDTO = {
-            content: post.getContent(),
-            like: post.getLikes(),
-            dislike: post.getDislikes()
+            message: "Você interagiu no post"
         }
         return dto
     }

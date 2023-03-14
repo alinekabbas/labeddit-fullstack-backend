@@ -6,40 +6,40 @@ export class CommentDatabase extends BaseDatabase {
     public static TABLE_POSTS = "posts"
     public static TABLE_LIKES_DISLIKES_COMMENTS = "likes_dislikes_comments"
 
-    public async insertComment(newCommentDB: CommentDB) {
+    public async insertComment(newCommentDB: CommentDB): Promise<void> {
         await BaseDatabase
             .connection(CommentDatabase.TABLE_COMMENTS)
             .insert(newCommentDB)
     }
 
-    public async findPost(id: string) {
+    public async findPost(id: string): Promise<PostWithCreatorDB | undefined> {
         const [postDB]: PostWithCreatorDB[] | undefined = await BaseDatabase
             .connection(CommentDatabase.TABLE_POSTS)
             .where({ id: id })
         return postDB
     }
 
-    public async findComment(id: string) {
+    public async findComment(id: string): Promise<CommentDB | undefined> {
         const [commentDB]: CommentDB[] | undefined = await BaseDatabase
             .connection(CommentDatabase.TABLE_COMMENTS)
             .where({ id: id })
         return commentDB
     }
 
-    public async updateCommentsInPosts(id:string){
+    public async updateCommentsInPosts(id:string): Promise<void>{
         await BaseDatabase
             .connection(CommentDatabase.TABLE_POSTS)
             .where({id: id})
     }
 
-    public async updateComment(commentDB: CommentDB) {
+    public async updateComment(commentDB: CommentDB): Promise<void> {
         await BaseDatabase
             .connection(CommentDatabase.TABLE_COMMENTS)
             .update(commentDB)
             .where({ id: commentDB.id })
     }
 
-    public async deleteComment(id: string) {
+    public async deleteComment(id: string): Promise<void> {
         await BaseDatabase
             .connection(CommentDatabase.TABLE_LIKES_DISLIKES_COMMENTS)
             .delete()
@@ -51,7 +51,7 @@ export class CommentDatabase extends BaseDatabase {
             .where({ id: id })
     }
 
-    public async findCommentWithCreatorId(id: string) {
+    public async findCommentWithCreatorId(id: string): Promise<CommentWithCreatorDB | undefined> {
         const result: CommentWithCreatorDB[] | undefined = await BaseDatabase
             .connection(CommentDatabase.TABLE_COMMENTS)
             .select(
@@ -71,7 +71,7 @@ export class CommentDatabase extends BaseDatabase {
         return result[0]
     }
 
-    public async likeOrDislikeComment(likeDislike: LikesDislikesCommentsDB) {
+    public async likeOrDislikeComment(likeDislike: LikesDislikesCommentsDB): Promise<void> {
         await BaseDatabase.connection(CommentDatabase.TABLE_LIKES_DISLIKES_COMMENTS)
             .insert(likeDislike)
     }
@@ -91,7 +91,7 @@ export class CommentDatabase extends BaseDatabase {
         }
     }
 
-    public async removeLikeDislike(likeDislike: LikesDislikesCommentsDB) {
+    public async removeLikeDislike(likeDislike: LikesDislikesCommentsDB): Promise<void> {
         await BaseDatabase.connection(CommentDatabase.TABLE_LIKES_DISLIKES_COMMENTS)
             .delete()
             .where({
@@ -100,7 +100,7 @@ export class CommentDatabase extends BaseDatabase {
             })
     }
 
-    public async updateLikeDislike(likeDislike: LikesDislikesCommentsDB) {
+    public async updateLikeDislike(likeDislike: LikesDislikesCommentsDB): Promise<void> {
         await BaseDatabase.connection(CommentDatabase.TABLE_LIKES_DISLIKES_COMMENTS)
             .update(likeDislike)
             .where({

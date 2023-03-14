@@ -154,7 +154,7 @@ export class CommentBusiness {
         const commentToDeleteDB = await this.commentDatabase.findComment(id)
 
         if (!commentToDeleteDB) {
-            throw new NotFoundError("'id' não encontrada")
+            throw new NotFoundError("'id' não encontrado")
         }
 
         const creatorId = tokenPayload.id
@@ -189,7 +189,7 @@ export class CommentBusiness {
         const likeDislikeCommentDB = await this.commentDatabase.findCommentWithCreatorId(id)
 
         if (!likeDislikeCommentDB) {
-            throw new NotFoundError("'id' não encontrada")
+            throw new NotFoundError("'id' não encontrado")
         }
 
         const userId = tokenPayload.id

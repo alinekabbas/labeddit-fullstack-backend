@@ -10,7 +10,7 @@ export class Post {
         private createdAt: string,
         private updatedAt: string,
         private creatorId: string,
-        private creatorNickname: string,
+        private creatorNickname: string
         
     ) {}
 
@@ -39,11 +39,11 @@ export class Post {
     }
 
     public addLike() {
-        this.likes += 1
+        this.likes ++
     }
 
     public removeLike() {
-        this.likes -= 1
+        this.likes --
     }
 
     public getDislikes() : number {
@@ -55,11 +55,11 @@ export class Post {
     }
 
     public addDislike() {
-        this.dislikes += 1
+        this.dislikes ++
     }
 
     public removeDislike() {
-        this.dislikes -= 1
+        this.dislikes --
     }
 
     public getCommentsPost() : number {
