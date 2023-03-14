@@ -1,5 +1,24 @@
-# labeddit-fullstack-backend
-Projeto fullstack para a criação de um aplicativo mobile first inspirado no Reddit
+# LabEddit ![logo](./src/assets/logo-header.png)
+
+Projeto fullstack para a criação de um aplicativo mobile first inspirado no Reddit.
+
+A API desenvolvida permite a interação de usuários na rede social.
+
+🔴 Acesse [aqui](https://documenter.getpostman.com/view/24460902/2s93JwMgYK) a documentação da API.
+
+## Funcionalidades
+
+- Para usuários:
+    - 📝 Cadastro
+    - 😀 Login
+
+- Para postagens e comentários:
+    - 🔍 Consultar
+    - ✏️ Criar
+    - 🔙 Editar
+    - ❌ Deletar
+    - 👍 Curtir 
+    - 👎 Não curtir
 
 ## Banco de dados
 
