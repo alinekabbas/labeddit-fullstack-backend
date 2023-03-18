@@ -42,6 +42,8 @@ https://dbdiagram.io/d/640201d2296d97641d853f93
 - Roteamento
 - Postman
 
+🔴 Acesse [aqui](https://github.com/alinekabbas/labeddit-fullstack-frontend) o link do repositório do LabEddit Frontend
+
 ## 📧 Meu Contato
 
 <a href="https://www.linkedin.com/in/aline-kabbas/" target="_blank"><img src="https://img.shields.io/badge/-LinkedIn-%230077B5?style=for-the-badge&logo=linkedin&logoColor=white" target="_blank"></a>

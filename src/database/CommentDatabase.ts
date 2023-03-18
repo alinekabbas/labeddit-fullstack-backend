@@ -1,4 +1,5 @@
-import { CommentDB, CommentWithCreatorDB, LikesDislikesCommentsDB, PostWithCreatorDB } from "../types";
+import { Post } from "../models/Post";
+import { CommentDB, CommentWithCreatorDB, LikesDislikesCommentsDB, PostDB, PostWithCreatorDB } from "../types";
 import { BaseDatabase } from "./BaseDatabase";
 
 export class CommentDatabase extends BaseDatabase {
@@ -26,9 +27,10 @@ export class CommentDatabase extends BaseDatabase {
         return commentDB
     }
 
-    public async updateCommentsInPosts(id:string): Promise<void>{
+    public async updateCommentsInPosts(id:string, post: PostDB): Promise<void>{
         await BaseDatabase
             .connection(CommentDatabase.TABLE_POSTS)
+            .update(post)
             .where({id: id})
     }
 
