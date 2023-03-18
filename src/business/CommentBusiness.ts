@@ -73,7 +73,7 @@ export class CommentBusiness {
         
         updateCommentCount.addCommentsPosts()
 
-        await this.commentDatabase.updateCommentsInPosts(id)
+        await this.commentDatabase.updateCommentsInPosts(id, post)
 
         updateCommentCount.toBusinessModel()
         

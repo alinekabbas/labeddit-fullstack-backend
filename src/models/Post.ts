@@ -39,11 +39,11 @@ export class Post {
     }
 
     public addLike() {
-        this.likes ++
+        this.likes +=1
     }
 
     public removeLike() {
-        this.likes --
+        this.likes -=1
     }
 
     public getDislikes() : number {
@@ -55,11 +55,11 @@ export class Post {
     }
 
     public addDislike() {
-        this.dislikes ++
+        this.dislikes +=1
     }
 
     public removeDislike() {
-        this.dislikes --
+        this.dislikes -=1
     }
 
     public getCommentsPost() : number {
