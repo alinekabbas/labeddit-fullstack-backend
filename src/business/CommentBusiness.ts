@@ -1,4 +1,5 @@
 import { CommentDatabase } from "../database/CommentDatabase"
+import { PostDatabase } from "../database/PostDatabase"
 import { CommentDTO, CreateCommentInputDTO, DeleteCommentInputDTO, EditCommentInputDTO, LikeDislikeCommentInputDTO } from "../dtos/CommentDTO"
 import { BadRequestError } from "../errors/BadRequestError"
 import { NotFoundError } from "../errors/NotFoundError"
@@ -11,6 +12,7 @@ import { LikesDislikesCommentsDB, USER_ROLE } from "../types"
 export class CommentBusiness {
     constructor(
         private commentDTO: CommentDTO,
+        private postDatabase: PostDatabase,
         private commentDatabase: CommentDatabase,
         private idGenerator: IdGenerator,
         private tokenManager: TokenManager
@@ -73,9 +75,8 @@ export class CommentBusiness {
         
         updateCommentCount.addCommentsPosts()
 
-        await this.commentDatabase.updateCommentsInPosts(id, post)
-
-        updateCommentCount.toBusinessModel()
+        const updatedPostDB = updateCommentCount.toDBModel()
+        await this.postDatabase.updatePost(updatedPostDB)
         
         const output = this.commentDTO.createCommentOutput(newComment)
 
