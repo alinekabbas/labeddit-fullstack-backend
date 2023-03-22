@@ -1,5 +1,11 @@
 import { UserDatabase } from "../database/UserDatabase"
-import { LoginUserInputDTO, LoginUserOutputDTO, SignupUsersInputDTO, SignupUsersOutputDTO, UserDTO } from "../dtos/UserDTO"
+import { 
+    LoginUserInputDTO, 
+    LoginUserOutputDTO, 
+    SignupUsersInputDTO, 
+    SignupUsersOutputDTO, 
+    UserDTO 
+} from "../dtos/UserDTO"
 import { BadRequestError } from "../errors/BadRequestError"
 import { NotFoundError } from "../errors/NotFoundError"
 import { User } from "../models/User"
