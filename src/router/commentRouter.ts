@@ -20,6 +20,7 @@ const commentController = new CommentController(
     )
 )
 
+commentRouter.get("/:id/post", commentController.getCommentsByPostId)
 commentRouter.post("/:id/post", commentController.createComment)
 commentRouter.put("/:id", commentController.editComment)
 commentRouter.delete("/:id", commentController.deleteComment)

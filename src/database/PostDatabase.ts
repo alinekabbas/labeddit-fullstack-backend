@@ -21,17 +21,11 @@ export class PostDatabase extends BaseDatabase {
                 "users.nickname AS creator_nickname"
             )
             .join("users", "posts.creator_id", "=", "users.id")
-            return result
+        return result
     }
 
-    public async insertPost(newPostDB: PostDB):Promise<void> {
-        await BaseDatabase
-            .connection(PostDatabase.TABLE_POSTS)
-            .insert(newPostDB)
-    }
-
-    public async getPostsWithComments(id: string): Promise<PostWithCreatorDB | undefined> {
-        const [posts]: PostWithCreatorDB[] = await BaseDatabase
+    public async getPostById(id: string) {
+        const result: PostWithCreatorDB[] = await BaseDatabase
             .connection(PostDatabase.TABLE_POSTS)
             .select(
                 "posts.id",
@@ -43,13 +37,20 @@ export class PostDatabase extends BaseDatabase {
                 "posts.updated_at",
                 "posts.creator_id",
                 "users.nickname AS creator_nickname"
-            )
+                )
             .join("users", "posts.creator_id", "=", "users.id")
             .where({ "posts.id": id })
-        return posts
+
+        return result
     }
 
-    public async findComments(id: string):Promise<CommentWithCreatorDB | undefined> {
+    public async insertPost(newPostDB: PostDB): Promise<void> {
+        await BaseDatabase
+            .connection(PostDatabase.TABLE_POSTS)
+            .insert(newPostDB)
+    }
+
+    public async findComments(id: string): Promise<CommentWithCreatorDB | undefined> {
         const [comments]: CommentWithCreatorDB[] = await BaseDatabase
             .connection(PostDatabase.TABLE_COMMENTS)
             .select(
@@ -78,14 +79,14 @@ export class PostDatabase extends BaseDatabase {
         return postDB
     }
 
-    public async updatePost(postDB: PostDB):Promise<void> {
+    public async updatePost(postDB: PostDB): Promise<void> {
         await BaseDatabase
             .connection(PostDatabase.TABLE_POSTS)
             .update(postDB)
             .where({ id: postDB.id })
     }
 
-    public async deletePost(id: string):Promise<void> {
+    public async deletePost(id: string): Promise<void> {
         await BaseDatabase
             .connection(PostDatabase.TABLE_LIKES_DISLIKES)
             .delete()
@@ -122,7 +123,7 @@ export class PostDatabase extends BaseDatabase {
         return result[0]
     }
 
-    public async likeOrDislikePost(likeDislike: LikesDislikesPostsDB):Promise<void> {
+    public async likeOrDislikePost(likeDislike: LikesDislikesPostsDB): Promise<void> {
         await BaseDatabase.connection(PostDatabase.TABLE_LIKES_DISLIKES)
             .insert(likeDislike)
     }
@@ -142,7 +143,7 @@ export class PostDatabase extends BaseDatabase {
         }
     }
 
-    public async removeLikeDislike(likeDislike: LikesDislikesPostsDB):Promise<void> {
+    public async removeLikeDislike(likeDislike: LikesDislikesPostsDB): Promise<void> {
         await BaseDatabase.connection(PostDatabase.TABLE_LIKES_DISLIKES)
             .delete()
             .where({
@@ -151,7 +152,7 @@ export class PostDatabase extends BaseDatabase {
             })
     }
 
-    public async updateLikeDislike(likeDislike: LikesDislikesPostsDB):Promise<void> {
+    public async updateLikeDislike(likeDislike: LikesDislikesPostsDB): Promise<void> {
         await BaseDatabase.connection(PostDatabase.TABLE_LIKES_DISLIKES)
             .update(likeDislike)
             .where({

@@ -19,7 +19,7 @@ const postController = new PostController(
 )
 
 postRouter.get("/", postController.getPosts)
-postRouter.get("/:id/comments", postController.getPostWithComments)
+postRouter.get("/:id", postController.getPostById)
 postRouter.post("/", postController.createPost)
 postRouter.put("/:id", postController.editPost)
 postRouter.delete("/:id", postController.deletePost)

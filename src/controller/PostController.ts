@@ -29,17 +29,16 @@ export class PostController {
         }
     }
 
-    public getPostWithComments = async(req: Request, res: Response) =>{
+    public getPostById = async (req: Request, res: Response) => {
         try {
             const input = {
                 id: req.params.id,
                 token: req.headers.authorization
             }
-
-            const output = await this.postBusinnes.getPostWithComments(input)
+            const output = await this.postBusinnes.getPostById(input)
 
             res.status(200).send(output)
-            
+
         } catch (error) {
             console.log(error)
 

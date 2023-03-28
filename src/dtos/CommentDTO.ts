@@ -1,6 +1,13 @@
 import { BadRequestError } from "../errors/BadRequestError"
 import { Comment } from "../models/Comment"
+import { CommentModel } from "../types"
 
+export interface GetCommentInputDTO {
+    id: string
+    token: string | undefined
+}
+
+export type GetCommentOuputDTO = CommentModel[]
 
 export interface CreateCommentInputDTO {
     id: string
@@ -54,6 +61,25 @@ export interface LikeDislikeCommentOutputDTO {
 }
 
 export class CommentDTO {
+    public getCommentInput(
+        id: unknown,
+        token: unknown
+    ): GetCommentInputDTO {
+        if (typeof id !== "string") {
+            throw new BadRequestError("'id' deve ser string")
+        }
+
+        if (typeof token !== "string") {
+            throw new BadRequestError("'token' deve ser string")
+        }
+
+        const dto: GetCommentInputDTO = {
+            id,
+            token
+        }
+
+        return dto
+    }
     
     public createCommentInput(
         id: unknown,

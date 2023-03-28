@@ -63,7 +63,7 @@ CREATE TABLE comments(
 );
 
 SELECT * FROM comments
-WHERE post_id = "1287b27e-22b3-4f48-b94e-0281ef096698";
+WHERE post_id = "a5a70d6a-39c4-4b26-8aab-fa8569216e38";
 
 
 SELECT * FROM comments;
