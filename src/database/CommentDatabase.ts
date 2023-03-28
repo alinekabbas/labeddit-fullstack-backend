@@ -1,4 +1,3 @@
-import { Post } from "../models/Post";
 import { CommentDB, CommentWithCreatorDB, LikesDislikesCommentsDB, PostDB, PostWithCreatorDB } from "../types";
 import { BaseDatabase } from "./BaseDatabase";
 
@@ -6,6 +5,26 @@ export class CommentDatabase extends BaseDatabase {
     public static TABLE_COMMENTS = "comments"
     public static TABLE_POSTS = "posts"
     public static TABLE_LIKES_DISLIKES_COMMENTS = "likes_dislikes_comments"
+
+    public async getCommentsByPostId(id: string) {
+        const result = await BaseDatabase
+            .connection(CommentDatabase.TABLE_COMMENTS)
+            .select(
+                "comments.id ",
+                "comments.post_id ",
+                "comments.content ",
+                "comments.likes",
+                "comments.dislikes ",
+                "comments.created_at ",
+                "comments.updated_at ",
+                "comments.creator_id",
+                "users.nickname AS creator_nickname"
+            )
+            .join("users", "comments.creator_id", "=", "users.id")
+            .where({ post_id: id })
+
+        return result
+    }
 
     public async insertComment(newCommentDB: CommentDB): Promise<void> {
         await BaseDatabase
@@ -27,11 +46,11 @@ export class CommentDatabase extends BaseDatabase {
         return commentDB
     }
 
-    public async updateCommentsInPosts(id:string, post: PostDB): Promise<void>{
+    public async updateCommentsInPosts(id: string, post: PostDB): Promise<void> {
         await BaseDatabase
             .connection(CommentDatabase.TABLE_POSTS)
             .update(post)
-            .where({id: id})
+            .where({ id: id })
     }
 
     public async updateComment(commentDB: CommentDB): Promise<void> {

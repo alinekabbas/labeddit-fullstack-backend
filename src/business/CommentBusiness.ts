@@ -5,6 +5,8 @@ import {
     CreateCommentInputDTO, 
     DeleteCommentInputDTO, 
     EditCommentInputDTO, 
+    GetCommentInputDTO, 
+    GetCommentOuputDTO, 
     LikeDislikeCommentInputDTO 
 } from "../dtos/CommentDTO"
 import { BadRequestError } from "../errors/BadRequestError"
@@ -13,7 +15,7 @@ import { Comment } from "../models/Comment"
 import { Post } from "../models/Post"
 import { IdGenerator } from "../services/IdGenerator"
 import { TokenManager } from "../services/TokenManager"
-import { LikesDislikesCommentsDB, USER_ROLE } from "../types"
+import { CommentWithCreatorDB, LikesDislikesCommentsDB, USER_ROLE } from "../types"
 
 export class CommentBusiness {
     constructor(
@@ -23,6 +25,44 @@ export class CommentBusiness {
         private idGenerator: IdGenerator,
         private tokenManager: TokenManager
     ) { }
+
+    public getCommentsByPostId = async (input: GetCommentInputDTO) => {
+        const { id, token } = input
+
+        if (token === undefined) {
+            throw new BadRequestError("'token' ausente")
+        }
+
+        const tokenPayload = this.tokenManager.getPayload(token)
+
+        if (tokenPayload === null) {
+            throw new BadRequestError("'token' inválido")
+        }
+
+        const commentsDB: CommentWithCreatorDB[] = await this.commentDatabase.getCommentsByPostId(id)
+
+        if (!commentsDB) {
+            throw new NotFoundError("'id' não encontrado")
+        }
+
+        const comments = commentsDB.map((commentDB)=>{
+            const comment = new Comment(
+                commentDB.id,
+                commentDB.post_id,
+                commentDB.content,
+                commentDB.likes,
+                commentDB.dislikes,
+                commentDB.created_at,
+                commentDB.updated_at,
+                commentDB.creator_id,
+                commentDB.creator_nickname
+            )
+            return comment.toBusinessModel()
+        })
+
+        const output: GetCommentOuputDTO = comments
+        return output
+    }
 
     public createComment = async (input: CreateCommentInputDTO) => {
         const { id, token, content } = input
